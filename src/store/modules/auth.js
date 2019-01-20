@@ -1,7 +1,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-param-reassign */
 import Vue from 'vue';
-import { AUTH_LOGIN, AUTH_LOGOUT, PROFILE_LOAD, PROFILE_CLEAR } from '../actions';
+import { AUTH_LOGIN, AUTH_LOGOUT, PROFILE_LOAD, PROFILE_CLEAR, AUTH_REFRESH } from '../actions';
 import { getToken, setToken, removeToken } from '../../utils/token';
 
 const AUTH_REQUEST_MUT = 'AUTH_REQUEST_MUT';
@@ -11,7 +11,7 @@ const AUTH_LOGOUT_MUT = 'AUTH_LOGOUT_MUT';
 const AUTH_CLEAR_MUT = 'AUTH_CLEAR_MUT';
 
 const initialState = {
-  token: getToken() || '',
+  token: (getToken())?getToken().token:'',
   status: '',
   errorMessage: '',
 };
@@ -55,9 +55,12 @@ const actions = {
         if (response.status !== 200) {
           throw new Error(`Some netwotk problem, response status: ${response.status}`);
         }
-        const token = response.data.access_token;
+        const token = {
+          token: response.data.access_token,
+          time: new Date()
+        };
         setToken(token);
-        commit(AUTH_SUCCESS_MUT, token);
+        commit(AUTH_SUCCESS_MUT, token.token);
         dispatch(PROFILE_LOAD);
         return response;
       })
@@ -65,6 +68,34 @@ const actions = {
         commit(AUTH_ERROR_MUT, err.message);
         throw new Error(err.message);
       });
+  },
+
+  /**
+   * Операция обновления токена
+   * @param commit
+   * @returns {Promise.<TResult>}
+   */
+  [AUTH_REFRESH] : async ({commit}) => {
+    commit(AUTH_REQUEST_MUT);
+    const token_time = new Date(getToken().time);
+    if (parseInt((new Date - token_time)/1000) >= 3600) {
+      return await Vue.axios.post('/users/refresh')
+        .then((response) => {
+          if (response.status !== 200) {
+            throw new Error(`Some netwotk problem, response status: ${response.status}`);
+          }
+          const token = {
+            token: response.data.access_token,
+            time: new Date()
+          };
+          setToken(token);
+          commit(AUTH_SUCCESS_MUT, token.token);return response;
+        })
+        .catch((err) => {
+          commit(AUTH_ERROR_MUT, err.message);
+          throw new Error(err.message);
+        });
+    }
   },
   [AUTH_LOGOUT]: ({ commit, dispatch }) => {
     commit(AUTH_LOGOUT_MUT);

@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import Vue from 'vue';
-import { PROFILE_LOAD, AUTH_LOGOUT, PROFILE_TRY_TO_LOAD, PROFILE_CLEAR } from '../actions';
+import { PROFILE_LOAD, AUTH_LOGOUT, PROFILE_TRY_TO_LOAD, PROFILE_CLEAR, AUTH_REFRESH} from '../actions';
 
 const PROFILE_REQUEST_MUT = 'PROFILE_REQUEST_MUT';
 const PROFILE_SUCCESS_MUT = 'PROFILE_SUCCESS_MUT';
@@ -55,6 +55,7 @@ const actions = {
   },
   [PROFILE_CLEAR]: ({ commit }) => commit(PROFILE_CLEAR_MUT),
   [PROFILE_TRY_TO_LOAD]: ({ dispatch, getters, rootGetters }) => {
+    dispatch(AUTH_REFRESH);
     if (rootGetters.isLoggedIn && !getters.isProfileLoaded) {
       dispatch(PROFILE_LOAD);
     }
