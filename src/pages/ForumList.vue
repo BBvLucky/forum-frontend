@@ -4,31 +4,13 @@
       <router-link to="/create-post" tag="button" class="button button-main" v-show="isLoggedIn">Добавить тему +
       </router-link>
       <h2 class="header-of-list">Список тем</h2>
-      <div v-for="item in items" :key="item.id" class="post_unit row around-xs middle-xs">
-        <div class="list-of-topics col-xs-9 col-sm-10">
-          <router-link :to="{name: 'posts', params: {postId:item.id}}"><h4 class="header-of-topic">{{item.title}}</h4>
-          </router-link>
-          <div class="topic-params row">
-            <div v-if="item.tags" class="col-xs-12">
-              <div class="row tags-row">
-                <i class='icon-label'></i>
-                <a href="#" class="tags" v-for="(tag, i) in item.tags.split(',')" :key="i">{{ tag }}</a>
-              </div>
-            </div>
-            <div v-if="item.created_at" class="commentTime col-xs-12 col-sm-6 col-lg-4">
-              <i class='icon-clock'></i> {{[item.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}
-            </div>
-            <div class=" col-xs-12 col-sm-6 col-lg-4">
-              <i class='icon-eye'></i> {{item.views || 0}} {{ item.views | pluralize( ['просмотр', 'просмотра',
-              'просмотров']) }}
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-3 col-sm-2">
-          <p class="comments_count">{{item.comments}} </p>
-          <p class="comments_count">{{ item.comments | pluralize( ['ответ', 'ответа', 'ответов']) }}</p>
-        </div>
-      </div>
+
+      <post
+          v-for="item in items"
+          :key="item.id"
+          :item="item"></post>
+
+
       <div class="paginator">
         <button class="button paginate-links" v-on:click="prevPage" :disabled="page === 1">
           <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -47,32 +29,25 @@
         </button>
       </div>
     </div>
-    <div class="topic-block col-xs-12 col-md-4">
-      <h2 class="header-of-best-topics">Лучшие темы</h2>
-      <div v-for="bestItem in bestItems" :key="bestItem.id">
-        <div class="best-topic row">
-          <div class="userImg">{{bestItem.username[0].toUpperCase()}}</div>
-          <p
-            @click="() => linkToTopic(bestItem.id)"
-            class="new-topic-name col-xs">
-            {{bestItem.title}}
-          </p>
-          <div class="best-topic-props col-xs-2">
-            <p>{{bestItem.comments}}</p>
-            <p>{{ bestItem.comments | pluralize( ['ответ', 'ответа', 'ответов']) }}</p>
-          </div>
 
-        </div>
-      </div>
+    <bestPosts
+        :bestItems="bestItems"
+    ></bestPosts>
 
-    </div>
   </div>
 </template>
 
 <script>
+  import post from '@/components/posts/post.vue';
+  import bestPosts from '@/components/posts/best_posts.vue';
+
   export default {
     name: 'ForumList',
     props: ['query'],
+    components: {
+      post,
+      bestPosts
+    },
     data() {
       return {
         userSearch: '',
@@ -180,10 +155,6 @@
         }
         this.pagesList = rangeWithDots;
       },
-
-      linkToTopic(postId) {
-        this.$router.push({name: 'posts', params: { postId }})
-      }
     },
     computed: {
       numberOfPage: function () {
@@ -211,50 +182,6 @@
   .header-of-list
     margin-left: 50px
     margin-top: 25px
-
-  .post_unit
-    line-height: 6px
-    border-bottom: 1px solid darkgray
-    padding: 1px
-    .list-of-topics
-      padding-top: 15px
-      padding-left: 40px
-      a
-        text-decoration: none
-      .header-of-topic
-        text-overflow: ellipsis
-        overflow: hidden
-        width: 100%
-        line-height: 22px
-        white-space: nowrap
-      .topic-params
-        margin-bottom: 15px
-        margin-top: 0
-        .tags-row
-          margin-top: 0
-          .tags
-            text-transform: uppercase
-            opacity: 1
-            line-height: 120%
-            &:hover
-              opacity: 0.5
-            &:not(:last-child)
-              margin-right: 1px
-              &:after
-                content: ","
-      div
-        display: flex
-        align-items: center
-        margin-top: 15px
-        color: $topic_params_color
-      i
-        margin-right: 5px
-        vertical-align: middle
-        opacity: 1
-    .comments_count
-      text-align: center
-      font-weight: bold
-      font-size: 18px
 
   .paginator
     margin: 35px 20px 40px 50px
@@ -285,43 +212,7 @@
     display: none
     margin-bottom: 0
 
-  .topic-block
-    padding: 13px 12px 0 12px
-    background-color: $topic_block_background
-    .header-of-best-topics
-      font-size: 20px
-      font-weight: bold
-      line-height: 23px
-      padding-bottom: 15px
 
-    *
-      margin: 0
-      padding: 0
-      background-color: $aside_background_color
-
-    div, a
-      font-size: $medium_font_size
-      font-weight: normal
-    .best-topic
-      margin-bottom: 24px
-    .userImg
-      height: 32px
-      border-radius: 50%
-      width: 32px
-      background-color: $light_background_color
-      text-align: center
-      line-height: 32px
-      margin-right: 6px
-      margin-bottom: 8px
-
-    .best-topic-name
-      padding-top: 5px
-      text-decoration: none
-      &:hover
-        opacity: 0.5
-    .best-topic-props
-      text-align: center
-      margin-right: 10px
 
 
 </style>

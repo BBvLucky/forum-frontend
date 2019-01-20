@@ -55,8 +55,8 @@ const actions = {
   },
   [PROFILE_CLEAR]: ({ commit }) => commit(PROFILE_CLEAR_MUT),
   [PROFILE_TRY_TO_LOAD]: ({ dispatch, getters, rootGetters }) => {
-    dispatch(AUTH_REFRESH);
     if (rootGetters.isLoggedIn && !getters.isProfileLoaded) {
+      dispatch(AUTH_REFRESH);
       dispatch(PROFILE_LOAD);
     }
   },

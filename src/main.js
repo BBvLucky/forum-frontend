@@ -9,6 +9,7 @@ import moment from 'moment';
 import VueMoment from 'vue-moment';
 import VueTextareaAutosize from 'vue-textarea-autosize'
 import pluralize from './utils/pluralize';
+// import страниц
 import ForumItem from '@/pages/ForumItem';
 import Rules from '@/pages/Rules';
 import ForumList from '@/pages/ForumList';

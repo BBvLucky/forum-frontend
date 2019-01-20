@@ -86,6 +86,9 @@ export default {
     logout() {
       this.$store.dispatch(AUTH_LOGOUT);
       this.showButton();
+      if (this.$route.path === '/profile') {
+        this.$router.push({name: "home"})
+      }
     },
     showButton() {
       this.hideBtn = !this.hideBtn;
@@ -147,10 +150,10 @@ header
 
 #search-img, #search_line, #user-ico, .button
   background-color: $background-color
-  
+
 #search
   /*min-width: 607px*/
-  
+
 #search_line
   height: 32px
   border-radius: 4px
@@ -167,7 +170,7 @@ header
   width: 40px
   height: 40px
   outline: 1px solid red
-    
+
 .auth_btn
   height: 30px
   padding: 0
