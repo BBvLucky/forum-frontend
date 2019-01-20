@@ -1,13 +1,13 @@
 <template>
-  <div class="add-post-content">
-    <h3 class="add-post-title">Редактирование моей темы</h3>
-    <div class="create-new-post row center-xs">
+  <div class="add-post-content ">
+    <h3 class="add-post-title">Создание новой темы</h3>
+    <div class="create-new-post row between-xs">
       <div class="form-wrap col-xs-12 col-md-8">
-        <form class="posts row start-xs end-md" action="#" method="post" @submit.prevent="editPost">
+        <form class="posts row start-xs end-md" action="#" method="post" @submit.prevent="postNewPost">
           <div class="col-xs-12 row">
             <label for="headline" class="headline col-xs-12 col-md-3">Заголовок темы</label>
             <input
-              v-model.trim="title"
+              v-model.trim="newPostTitle"
               autocomplete="false"
               type="text"
               id="headline"
@@ -35,7 +35,7 @@
           <div class="col-xs-12 row">
             <label for="message" class="message col-xs-12 col-md-3">Текст сообщения</label>
             <textarea
-              v-model="content"
+              v-model="newPostBody"
               id="message"
               rows="10"
               class="textarea col-xs-12 col-md-9"
@@ -45,30 +45,54 @@
             </textarea>
             <p class="error" v-if="errors.content">Необходимо заполнить поле</p>
           </div>
-          <!--<div class="checkbox row start-xs">-->
-            <!--<div>-->
-              <!--<input type="checkbox"-->
-                     <!--id="rules"-->
-                     <!--v-model="isCheckedRules"-->
-                     <!--@change="checkForm">-->
-              <!--<label for="rules"> Я внимательно ознакомился и обязуюсь соблюдать-->
-                <!--<a class="rules" href="#">правила форума</a>.-->
-              <!--</label>-->
-            <!--</div>-->
-            <!--<div>-->
-              <!--<input type="checkbox" id="agree" v-model="isCheckedAgree" @change="checkForm">-->
-              <!--<label for="agree">Я согласен с тем, что модераторы могут удалять темы и комментарии за-->
-                <!--нарушение правил без объяснения причин.-->
-              <!--</label>-->
-            <!--</div>-->
-            <!--<p class="error-is-checked" v-if="errors.isChecked">Необходимо принять соглашения</p>-->
-          <!--</div>-->
+          <div class="checkbox row start-xs">
+            <div>
+              <input type="checkbox"
+                     id="rules"
+                     v-model="isCheckedRules"
+                     @change="checkForm">
+              <label for="rules"> Я внимательно ознакомился и обязуюсь соблюдать
+                <router-link to="/rules" class="rules">
+                  правила форума
+                </router-link>.
+              </label>
+            </div>
+            <div>
+              <input type="checkbox" id="agree" v-model="isCheckedAgree" @change="checkForm">
+              <label for="agree">Я согласен с тем, что модераторы могут удалять темы и комментарии за
+                нарушение правил без объяснения причин.
+              </label>
+            </div>
+            <p class="error-is-checked" v-if="errors.isChecked">Необходимо принять соглашения</p>
+          </div>
           <div class="row center-xs end-sm">
-            <button type="submit" formmethod="post" class="button button-default-big button-submit">Сохранить изменения
+            <button type="submit" formmethod="post" class="button button-default-big button-submit">Опубликовать тему
             </button>
-            <router-link :to="{name: 'posts', params: {postId: postId}}" tag="button" class="button button-default-big">Отмена</router-link>
+            <router-link to="/" tag="button" class="button button-default-big">Отмена</router-link>
           </div>
         </form>
+      </div>
+      <div class="instructions col-xs-12 col-md-3">
+        <p class="question">
+          Как правильно создать тему обсуждения?
+        </p>
+        <p>
+          Четко сформулируйте заголовок и придумайте теги, чтобы Ваш вопрос могли легко находить.
+          И не забывайте благодарить людей, если они Вам помогают.
+        </p>
+        <p class="question">
+          У Вас вопрос к администрации сайта?
+        </p>
+        <p>
+          Если Ваш вопрос обращен к администрации сайта, а не к пользователям, то тему создавать не нужно.
+          Подобные темы будут удаляться. С администрацией можно связаться через контакты внизу сайта.
+        </p>
+        <p class="question">
+          Хотите пообщаться с кем-то лично?
+        </p>
+        <p>
+          Найдите его профиль на сайте и напишите ему личное сообщение.
+        </p>
       </div>
     </div>
   </div>
@@ -79,19 +103,19 @@
   import {AxiosInstance as axios} from "axios";
 
   export default {
-    name: 'EditPost',
+    name: 'AddNewPost',
     components: {
       VueTagsInput,
     },
-    props: ['postId'],
+    props: {},
     data() {
       return {
         tag: '',
         tags: [],
         autocompleteItems: [],
         debounce: null,
-        title: '',
-        content: '',
+        newPostTitle: null,
+        newPostBody: null,
         description: '',
         isCheckedRules: null,
         isCheckedAgree: null,
@@ -105,42 +129,27 @@
         }
       };
     },
-    mounted() {
-      // is logged in else redirect
-
-      this.axios.get('posts/' + this.postId)
-        .then((post) => {
-          console.log(post.data);
-          this.post = post.data;
-          this.title = post.data.title;
-          this.content = post.data.content;
-          //this.postId = post.data.id;
-          this.tags = post.data.tags.split(',').map(tag => {
-            return { text: tag }
-          });
-        })
-    },
     methods: {
-      editPost() {
+      postNewPost() {
         this.isDirty = true;
         if (this.checkForm()) {
           return;
         }
-
-        this.axios.put('http://api.forum.pocketmsg.ru/posts/' + this.postId, {
+        this.axios.post('http://api.forum.pocketmsg.ru/posts', {
           category_id: 1,
-          title: this.title,
+          title: this.newPostTitle,
           description: this.description,
-          content: this.content,
+          content: this.newPostBody,
           tags: this.tags.map(tag => tag.text)
         })
           .then(response => {
-            // если все ок
-            //response.data.id
-             this.$router.push({path: `/posts/${this.postId}`});
+            let postId = response.data.id;
+            if(postId) {
+              this.$router.push({path: `/posts/${postId}`});
+            }
           })
           .catch(error => alert(error));
-       },
+      },
 
       checkForm: function () {
         if (!this.isDirty) {
@@ -149,11 +158,11 @@
         this.errors = {};
         let isError = false;
 
-        if (!this.title) {
+        if (!this.newPostTitle) {
           this.errors.title = 'Не заполнен заголовок';
           isError = true;
         }
-        if (!this.content) {
+        if (!this.newPostBody) {
           this.errors.content = 'Не заполнено тело поста';
           isError = true;
         }
@@ -165,10 +174,10 @@
           this.errors.tagsLength = 'Только 10 тегов';
           isError = true;
         }
-        // if (!this.isCheckedRules || !this.isCheckedAgree) {
-        //   this.errors.isChecked = 'Не принято соглашение';
-        //   isError = true;
-        // }
+        if (!this.isCheckedRules || !this.isCheckedAgree) {
+          this.errors.isChecked = 'Не принято соглашение';
+          isError = true;
+        }
 
         console.log(this.errors);
         return isError;
@@ -191,9 +200,6 @@
         //   }).catch(() => console.warn('Oh. Something went wrong'));
         // }, 600);
       },
-      redirectToPost() {
-        this.$router.push({path: `/posts/${this.postId}`});
-      }
     },
     watch: {
       'tag': 'initItems',
@@ -202,7 +208,7 @@
 </script>
 
 <style lang="sass" scoped>
-  @import "../assets/variables"
+  @import "../../assets/variables"
   $input_color: #ddd
   $input_focus_color: black
   $alert_color: red
@@ -302,11 +308,20 @@
             margin-left: 7px
             cursor: pointer
 
-  .add-post-title
-    @media (min-width: $xs) and (max-width: $md - 1px)
+      .instructions
+        padding: 10px
+        background-color: $topic_block_background
+        p
+          margin-bottom: 14px
+        .question
+          font-weight: 700
+
+  .add-post-title,
+  .create-new-post
+    @media (min-width: 320px) and (max-width: 768px)
       margin-left: 0
-    @media (min-width: $md)
-      margin-left: 185px
+    @media (min-width: 769px)
+      margin-left: 64px
 
   input[type="text"],
   .vue-tags-input,

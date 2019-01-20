@@ -12,7 +12,7 @@
       <div id="main-content">
         <div id="left-main-content">
           <h1>Личный кабинет</h1>
-          
+
           <div id="user-personal">
             <div id="personal-user-img">
               <a href="#" id="edit-user-img">
@@ -40,18 +40,18 @@
               <input id="tab5" type="radio" name="tabs">
               <label for="tab5" class="tabs">Нравится</label>
             </div>
-            
+
             <section id="tab-content">
               <form name="user-info">
                 <label for="user-name">Имя</label>
                 <input id="user-name-field" name="user-name">
-                
+
                 <label for="user-surname">Фамилия</label>
                 <input id="user-surname-field" name="user-surname">
-                
+
                 <label for="user-about">О себе</label>
                 <div><textarea id="user-about-field" name="user-about"></textarea></div>
-                
+
                 <label for="user-contacts">Контакты</label>
                 <div>
                   <select name="user-contacts" class="user-contacts-list">
@@ -62,8 +62,8 @@
                   <input name="user-contacts" class="user-contacts-field">
                 </div>
                 <a href="#" class="add-contact">Добавить</a>
-                
-                
+
+
                 <label for="user-location">Местоположение</label>
                 <div>
                   <select name="user-location" class="user-location-list">
@@ -79,7 +79,7 @@
                     <option>Ростов-на-Дону</option>
                   </select>
                 </div>
-                
+
                 <div id="button-wrapper">
                   <button class="button button-main">Сохранить</button>
                   <button class="button button-main">Отмена</button>
@@ -126,22 +126,22 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>
-@import "../assets/variables"
+@import "../../assets/variables"
 
 #main
   display: grid
   grid-template-columns: 15% 85%
   min-height: 450px
-  
+
 #left-main-block
   background-color: $aside_background_color
   margin-right: 15px
-  
+
 #right-main-block
   background-color: $background-color
   display: flex
   flex-direction: column
-  
+
 #nav-panel
   margin: 12px 0 15px 0
 #nav-panel a
@@ -280,7 +280,7 @@
     margin: 6px 0 12px 10px
   .user-location-list
     width: 383px
-    
+
 .button
   margin: 0 34px 14px 0
 
@@ -295,16 +295,16 @@
     font-weight: bolder
     line-height: 23px
     margin-bottom: 30px
-    
+
 .new-topic
   display: flex
   align-items: center
-  margin-bottom: 25px 
+  margin-bottom: 25px
   a
     text-decoration: none
     font-size: 14px
     font-weight: 500
-    
+
 .userImg
   line-height: 32px
   width: 32px
@@ -313,12 +313,12 @@
   text-align: center
   font-size: 14px
   font-weight: 500
-  
+
 .new-topic-props
   text-align: center
   font-size: 14px
   font-weight: 500
-  
+
 @media screen and (max-width: 1100px)
   .user-contacts-field
     margin: 10px 0 0 0
@@ -326,7 +326,7 @@
     min-width: 100%
   #user-name-field, #user-surname-field, #user-about-field
     max-width: 100%
-    
+
 @media screen and (max-width: 1000px)
   #main
     grid-template-columns: 100%
@@ -340,7 +340,7 @@
     margin-top: 15px
   #left-main-block
     display: none
-    
+
 @media screen and (max-width: 525px)
   #personal-user-img
     min-width: 104px
@@ -352,10 +352,10 @@
     display: flex
     justify-content: center
     flex-wrap: wrap
-    
+
 @media screen and (max-width: 335px)
   #user-personal
     justify-content: center
     flex-wrap: wrap
-    
+
 </style>

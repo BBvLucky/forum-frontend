@@ -1,8 +1,10 @@
 <template>
-  <div class="container">
-      <forum-header class="header"></forum-header>
+  <div>
+    <forum-header class="header"></forum-header>
+    <div class="container">
       <router-view class="main-app-content"></router-view>
-      <forum-footer class="footer"></forum-footer>
+    </div>
+    <forum-footer class="footer"></forum-footer>
   </div>
 </template>
 

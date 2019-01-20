@@ -152,8 +152,8 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import { TOPIC_LOAD, TOPIC_DELETE, TOPIC_ADD_COMMENT, TOPIC_CLEAR } from '../store/actions';
-  import Comment from '../components/Comment.vue';
+  import { TOPIC_LOAD, TOPIC_DELETE, TOPIC_ADD_COMMENT, TOPIC_CLEAR } from '../../store/actions';
+  import Comment from '../../components/Comment.vue';
   export default {
     name: 'ForumItem',
     props: ['postId'],
@@ -161,7 +161,7 @@
       Comment,
     },
     data() {
-      return {        
+      return {
         myComment: '',
         showDelConfirmation: false,
         lastItems: []
@@ -223,7 +223,7 @@
     },
     methods: {
       prepareComment(name, id) {
-        this.$refs.comment.$el.focus(); 
+        this.$refs.comment.$el.focus();
         if (!this.isLoggedIn || this.myComment !== '' || this.isMyProfileId(id)) {
           return;
         }
@@ -233,7 +233,7 @@
         if (e.ctrlKey && e.key === "Enter") {
           this.addComment();
         } else if (e.key === "Escape") {
-          this.myComment = ""; 
+          this.myComment = "";
         }
       },
       async addComment() {
@@ -261,7 +261,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>
-  @import "../assets/variables"
+  @import "../../assets/variables"
 
   .content
     h2
@@ -297,14 +297,14 @@
       &:hover
         opacity: 0.5
       .icon-arrow-back
-        opacity: 0.5 
+        opacity: 0.5
         background-color: inherit
         margin-right: 11px
 
   .post-card
     padding: 20px
     margin-bottom: 17px
-    
+
   .post-title
     font-size: $forun_item_title_size
     word-wrap: break-word
@@ -317,7 +317,7 @@
       font-size: $forun_item_title_secondary_size
       @media screen and ( max-width: 420px )
         font-size: $forun_item_title_secondary_size__samll
-  
+
   .post-tags
     margin-bottom: 14px
     &-label
@@ -326,7 +326,7 @@
       color: $base_font_color
       opacity: 0.5
       margin-right: 8px
-  
+
   .post-tag
     display: inline-block
     font-size: $forun_item_secondary_font_size
@@ -360,7 +360,7 @@
       align-items: center
       font-weight: 700
       color: #333
-    
+
     .post-user-name
       font-size: $forun_item_secondary_font_size
       text-decoration: none
@@ -424,7 +424,7 @@
       &-edit:hover,
       .like:hover
         opacity: 0.5
-  
+
   .post-comments-load-button
     display: flex
     align-items: center
@@ -447,7 +447,7 @@
       text-decoration: underline
       &:hover
         opacity: 0.5
-  
+
   .add-comments-body
     @media screen and ( max-width: 768px )
       padding-top: 15px
@@ -467,7 +467,7 @@
         background-color: $background-color
     .button
       margin-bottom: 0
-  
+
   .same-request
     &:not(:last-child)
       margin-bottom: 12px
@@ -496,7 +496,7 @@
         &:not(:last-child)
           margin-right: 10px
         span
-          margin-left: 4px  
+          margin-left: 4px
     &-answer
       a
         cursor: default

@@ -76,9 +76,9 @@ const actions = {
    * @returns {Promise.<TResult>}
    */
   [AUTH_REFRESH] : async ({commit}) => {
-    commit(AUTH_REQUEST_MUT);
     const token_time = new Date(getToken().time);
     if (parseInt((new Date - token_time)/1000) >= 3600) {
+      commit(AUTH_REQUEST_MUT);
       return await Vue.axios.post('/users/refresh')
         .then((response) => {
           if (response.status !== 200) {
@@ -89,7 +89,8 @@ const actions = {
             time: new Date()
           };
           setToken(token);
-          commit(AUTH_SUCCESS_MUT, token.token);return response;
+          commit(AUTH_SUCCESS_MUT, token.token);
+          return response;
         })
         .catch((err) => {
           commit(AUTH_ERROR_MUT, err.message);

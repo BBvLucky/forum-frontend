@@ -10,16 +10,16 @@ import VueMoment from 'vue-moment';
 import VueTextareaAutosize from 'vue-textarea-autosize'
 import pluralize from './utils/pluralize';
 // import страниц
-import ForumItem from '@/pages/ForumItem';
 import Rules from '@/pages/Rules';
-import ForumList from '@/pages/ForumList';
-import LogIn from '@/pages/LogIn';
-import Registration from '@/pages/Registration';
-import ForumAccount from '@/pages/ForumAccount';
-import AddNewPost from '@/pages/AddNewPost';
+import Home from '@/pages/home';
+import LogIn from '@/pages/users/LogIn';
+import Registration from '@/pages/users/Registration';
+import ForumAccount from '@/pages/users/ForumAccount';
 import UIkit from '@/pages/UI-kit';
 import Page404 from '@/pages/Page404';
-import EditPost from '@/pages/EditPost';
+import Post from '@/pages/posts/onePost';
+import AddNewPost from '@/pages/posts/AddNewPost';
+import EditPost from '@/pages/posts/EditPost';
 
 Vue.use(VueRouter);
 Vue.config.productionTip = false;
@@ -36,12 +36,12 @@ Vue.use(VueTextareaAutosize);
 
 const router = new VueRouter({
   routes: [
-    {path: '/', name: 'home', component: ForumList},
-    {path: '/search/:query', name: 'userSearch', component: ForumList, props: true},
+    {path: '/', name: 'home', component: Home},
+    {path: '/search/:query', name: 'userSearch', component: Home, props: true},
     {path: '/search', redirect: '/' },
     {path: '/profile', component: ForumAccount},
-    {path: '/posts/:postId', name: 'posts', component: ForumItem, props: true},
-    {path: '/forum', component: ForumList},
+    {path: '/posts/:postId', name: 'posts', component: Post, props: true},
+    {path: '/forum', component: Home},
     {path: '/signup', component: Registration},
     {path: '/login', component: LogIn},
     {path: '/create-post', component: AddNewPost},

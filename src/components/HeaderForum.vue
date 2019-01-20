@@ -42,13 +42,16 @@
           <p class="my-name">{{my.name}}</p>
           <div id="user-ico"></div>
          </router-link>
-        <button
-          v-show="hideBtn"
-          class="auth_btn bnt_signOut button button-default"
-          @click="logout()">
-          Выход
-        </button>
-        <svg class="show-button" @click="showButton()" width="4" height="20" viewBox="0 0 4 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <transition name="userLog-fade">
+          <div class="user-logout" v-show="hideBtn">
+            <button
+                class="auth_btn bnt_signOut button button-default"
+                @click="logout()">
+              Выход
+            </button>
+          </div>
+        </transition>
+        <svg class="show-button" @click="showButton()" width="20" height="20" viewBox="0 0 4 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="2" cy="2" r="2"/>
           <circle cx="2" cy="10" r="2"/>
           <circle cx="2" cy="18" r="2"/>
@@ -127,6 +130,7 @@ header
 .logo, #search, #buttons, #user-field
   display: flex
   align-items: center
+  position: relative
 
 
 #btn-search
@@ -208,13 +212,34 @@ header
     color: $topic_block_background
 
 .show-button
-  margin-left: 15px
+  margin-left: 5px
   circle
     fill: $background-color
   &:hover circle
     fill: $button_hover_color
   &:active circle
     fill: $topic_block_background
+
+// кнопка выхода
+.user-logout
+  position: absolute
+  background: $dark_background_color
+  bottom: -57px
+  right: -10px
+  transition: all .3s ease
+  button
+    margin: 7px 15px !important
+.userLog-fade-enter-active
+  transition: all .3s ease
+
+.userLog-fade-leave-active
+  transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0)
+
+.userLog-fade-enter, .userLog-fade-leave-to
+  transform: translateX(10px)
+  opacity: 0
+
+
 
 .bnt_signOut
   cursor: pointer

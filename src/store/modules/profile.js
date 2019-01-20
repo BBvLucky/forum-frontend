@@ -54,9 +54,9 @@ const actions = {
       });
   },
   [PROFILE_CLEAR]: ({ commit }) => commit(PROFILE_CLEAR_MUT),
-  [PROFILE_TRY_TO_LOAD]: ({ dispatch, getters, rootGetters }) => {
+  [PROFILE_TRY_TO_LOAD]: async ({ dispatch, getters, rootGetters }) => {
     if (rootGetters.isLoggedIn && !getters.isProfileLoaded) {
-      dispatch(AUTH_REFRESH);
+      await dispatch(AUTH_REFRESH);
       dispatch(PROFILE_LOAD);
     }
   },
